@@ -1,0 +1,4 @@
+devpi-server:
+  host: packager
+  port: 3141
+  restrict-modify: root

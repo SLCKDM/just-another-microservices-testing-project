@@ -1,0 +1,94 @@
+{
+	"folders": [
+		{
+			"path": "/home/slick/projects/shop_project/ClientApp"
+		},
+		{
+			"path": "/home/slick/projects/shop_project/EmailNotifier"
+		},
+		{
+			"path": "/home/slick/projects/shop_project/OrderApp"
+		},
+		{
+			"path": "/home/slick/projects/shop_project/Packager"
+		},
+		{
+			"path": "/home/slick/projects/shop_project/PhoneNotifier"
+		},
+		{
+			"path": "/home/slick/projects/shop_project/shop_venv"
+		},
+		{
+			"path": "/home/slick/projects/shop_project/ShopApp"
+		},
+		{
+			"path": "/home/slick/projects/shop_project/Starter"
+		},
+		{
+			"path": "/home/slick/projects/shop_project/core_utils", "name": "core_utils"
+		}
+	],
+	"settings": {
+		"python.autoComplete.extraPaths": [
+			"/home/slick/projects/shop_project/core_utils",
+			"/home/slick/projects/shop_project/ClientApp",
+			"/home/slick/projects/shop_project/EmailNotifier",
+			"/home/slick/projects/shop_project/OrderApp",
+			"/home/slick/projects/shop_project/Packager",
+			"/home/slick/projects/shop_project/PhoneNotifier",
+			"/home/slick/projects/shop_project/shop_venv",
+			"/home/slick/projects/shop_project/ShopApp",
+			"/home/slick/projects/shop_project/Starter"
+		],
+		"python.analysis.extraPaths": [
+			"/home/slick/projects/shop_project/core_utils",
+			"/home/slick/projects/shop_project/ClientApp",
+			"/home/slick/projects/shop_project/EmailNotifier",
+			"/home/slick/projects/shop_project/OrderApp",
+			"/home/slick/projects/shop_project/Packager",
+			"/home/slick/projects/shop_project/PhoneNotifier",
+			"/home/slick/projects/shop_project/shop_venv",
+			"/home/slick/projects/shop_project/ShopApp",
+			"/home/slick/projects/shop_project/Starter"
+		]
+
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "1. PyPI",
+				"command": "docker network create shared-net; docker compose -f /home/slick/projects/shop_project/Starter/PyPI/docker-compose.yml up --build -d",
+				"type": "shell",
+				"problemMatcher": [
+					"$tsc"
+				],
+			},
+			{
+				"label": "3. Core",
+				"command": "docker compose -f /home/slick/projects/shop_project/Starter/core/docker-compose.yml up --build  -d",
+				"type": "shell",
+				"problemMatcher": [
+					"$tsc"
+				],
+			},
+			{
+				"label": "4. Services",
+				"command": "docker compose -f /home/slick/projects/shop_project/Starter/services/docker-compose.yml up --build -d",
+				"type": "shell",
+				"problemMatcher": [
+					"$tsc"
+				],
+			},
+			{
+				"label": "0. remove & clear",
+				"type": "shell",
+				"command": "yes |docker stop $(docker ps -a -q);yes |docker rm $(docker ps -a -q);yes |docker rmi $(docker images -a -q);yes |sudo docker system prune;yes |docker system prune --volumes;",
+				"problemMatcher": [
+					"$tsc"
+				]
+			},
+		]
+	}
+}
+

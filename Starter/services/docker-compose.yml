@@ -1,0 +1,117 @@
+version: '3.0'
+
+
+x-rabbit-vars: &rabbit-vars
+  RMQ_HOST: ${RMQ_HOST}
+  RMQ_PORT: ${RMQ_PORT}
+  RMQ_USER: ${RMQ_USER}
+  RMQ_PASSWORD: ${RMQ_PASSWORD}
+  RMQ_VHOST: ${RMQ_VHOST}
+
+x-postgres-vars: &postgres-vars
+  POSTGRES_DB: ${POSTGRES_DB}
+  POSTGRES_HOST: ${POSTGRES_HOST}
+  POSTGRES_PORT: ${POSTGRES_PORT}
+  POSTGRES_USER: ${POSTGRES_USER}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+
+services:
+
+
+  client_app:
+    build:
+      context: ./../../ClientApp
+      network: host
+    environment:
+      <<: [ *rabbit-vars, *postgres-vars ]
+    networks:
+      - shared-net
+
+  client_init:
+    build:
+      context: ./../../ClientApp
+      network: host
+    environment:
+      <<: *postgres-vars
+      MIGRATE: 1
+    networks:
+      - shared-net
+
+  email_app:
+    build:
+      context: ./../../EmailNotifier
+      network: host
+    environment:
+      <<: [ *rabbit-vars, *postgres-vars ]
+    networks:
+      - shared-net
+
+  # email_init:
+  #   build:
+  #     context: ../EmailNotifier
+  #     network: host
+  #   environment:
+  #     <<: *postgres-vars
+  #     MIGRATE: 1
+  #   depends_on:
+  #     - postgre
+  #     - rabbit
+
+  phone_app:
+    build:
+      context: ./../../PhoneNotifier
+      network: host
+    environment:
+      <<: [ *rabbit-vars, *postgres-vars ]
+    networks:
+      - shared-net
+
+  # phone_init:
+  #   build:
+  #     context: ../PhoneNotifier
+  #   environment:
+  #     <<: *postgres-vars
+  #   depends_on:
+  #     - postgre
+
+  shop_app:
+    build:
+      context: ./../../ShopApp
+      network: host
+    environment:
+      <<: [ *rabbit-vars, *postgres-vars ]
+    networks:
+      - shared-net
+    ports:
+      - 8000:8000
+
+  # shop_init:
+  #   build:
+  #     context: ../ShopApp
+  #   environment:
+  #     <<: *postgres-vars
+  #   depends_on:
+  #     - postgre
+
+  # order_app:
+  #   build:
+  #     context: ./OrderApp
+  #   environment:
+  #     <<: [ *rabbit-vars, *postgres-vars ]
+  #   depends_on:
+  #     - rabbit
+  #     - postgre
+
+  # order_init:
+  #   build:
+  #     context: ../OrderApp
+  #   environment:
+  #     <<: *postgres-vars
+  #   depends_on:
+  #     - postgre
+
+
+networks:
+  shared-net:
+    external: True

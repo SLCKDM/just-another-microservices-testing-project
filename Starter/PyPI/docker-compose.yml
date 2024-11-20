@@ -1,0 +1,24 @@
+
+services:
+
+  packager:
+    image: pypiserver/pypiserver:latest
+    restart: always
+    ports:
+      - 8080:8080
+    command: -P . -a . /data/packages
+    networks:
+      - shared-net
+
+  core-utils:
+    build:
+      context: ./../../core_utils
+      network: host
+    depends_on:
+      - packager
+    networks:
+      - shared-net
+
+networks:
+  shared-net:
+    external: True
